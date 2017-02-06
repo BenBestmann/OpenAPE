@@ -16,8 +16,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.openape.api.Messages;
+import org.openape.api.environmentcontext.EnvironmentContext;
+import org.openape.api.equipmentcontext.EquipmentContext;
+import org.openape.api.listing.Listing;
+import org.openape.api.rest.RESTPaths;
+import org.openape.api.taskcontext.TaskContext;
 import org.openape.api.usercontext.UserContext;
-import org.openape.api.rest.*;
 /** @author Lukas Smirek
 */
 
@@ -32,8 +37,37 @@ webResource = client.target(uri);
 }
 	
 public URI createUserContext(UserContext userContext) throws URISyntaxException{
-	return createContext(RESTPaths.USER_CONTEXTS, userContext);
+	Messages.
+	return createContext(MessagesUserContextRESTInterface.UserContextURLWithoutID   , userContext);
 }
+
+public URI createEquipmentContext(EquipmentContext equipmentContext) throws URISyntaxException{
+	return createContext(, equipmentContext);
+}
+
+public URI createEnvironmentContext(EnvironmentContext envrionmentContext) throws URISyntaxException{
+	return createContext(, EnvironmentContext.class);
+}
+
+public URI createTaskContext(TaskContext taskContext) throws URISyntaxException{
+	return createContext(, taskContext);
+}
+
+public Listing createListing(URI userContextUri, URI equipmentContextUri, URI environMentUri, URI taskContextUri){
+	Response response = webResource.path(path).request(MediaType.APPLICATION_JSON_TYPE)
+		    .post(Entity.entity(listingQuery,MediaType.APPLICATION_JSON));
+		    		
+			if (response.getStatus() != 201){
+				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+			}
+			
+		    Listing output = response.readEntity(Listing.class);
+		 	return output;
+}
+
+
+
+
 
 private URI createContext(String path,Object uploadContext ) throws URISyntaxException{
 	
